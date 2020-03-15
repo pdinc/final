@@ -4,7 +4,7 @@ require "sinatra/reloader" if development?                                      
 require "sequel"                                                                      #
 require "logger"                                                                      #
 require "twilio-ruby"                                                                 #
-require "bcrypt"                                                                      #
+require "bcrypt"                                                                  #
 connection_string = ENV['DATABASE_URL'] || "sqlite://#{Dir.pwd}/development.sqlite3"  #
 DB ||= Sequel.connect(connection_string)                                              #
 DB.loggers << Logger.new($stdout) unless DB.loggers.size > 0                          #
@@ -18,6 +18,11 @@ locations_table = DB.from(:locations)
 users_table = DB.from(:users)
 graffiti_table = DB.from(:graffiti)
 @gmaps_apikey = "AIzaSyCtovsQvkIUWlNqtYwXY87gEd4ZSmJEhMw"
+
+#Twilio API keys
+account_sid = ENV["TWILIO_ACCOUNT_SID"]
+auth_token = ENV["TWILIO_AUTH_TOKEN"]
+client = Twilio::REST::Client.new(account_sid, auth_token)
 
 before do
     @current_user = users_table.where(id: session["user_id"]).to_a[0]
@@ -50,16 +55,20 @@ post "/users/create" do
         users_table.insert(
             username: params["username"],
             email: params["email"],
-            telephone: params["telephone"],
+            telephone: "+1#{params["telephone"]}",
             password: BCrypt::Password.create(params["password"])
         )
-
         redirect "/logins/new"
     end
 end
 
 # display the login form (aka "new")
 get "/logins/new" do
+    client.messages.create(
+        from: "+14707190684", 
+        to: "+16174069139",
+        body: "Thanks for signing up!"
+    )
     view "new_login"
 end
 
