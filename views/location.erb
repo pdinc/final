@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-sm">
+        <h1> <%= @location[:placename] %> </h1>
+        <form action="/locations/<%= @location[:id] %>/graffiti/new">
+            <button type="submit" class="btn btn-primary" href="/locations/<%= @location[:id] %>/graffiti/create" method="post">Leave some graffiti here</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm">
+        <% for @item in @graffiti do %>
+            <p>  @item[:graffiti] </p>
+        <% end %>
+    </div>
+</div>

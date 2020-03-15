@@ -23,8 +23,10 @@ DB.create_table! :graffiti do
   foreign_key :user_id
   foreign_key :location_id
   String :graffiti
-  Date :graffitidate
-  Boolean :anonymous
+  Fixnum :graffitiyear
+  Fixnum :graffitimonth
+  Fixnum :graffitiday
+  Fixnum :anonymous
 end
 
 # Insert initial (seed) data for locations
@@ -32,8 +34,31 @@ locations_table = DB.from(:locations)
 
 locations_table.insert(placename: "Wieboldt Hall",
                     gmapsplaceid: "ChIJ1STroD0pDogR5cNexT86gbs", 
-                    zipcode: 60611)
+                    zipcode: 60611
+)
 
 locations_table.insert(placename: "Global Hub",
                     gmapsplaceid: "ChIJmWd1cp7aD4gRzYzB_KYoiu4", 
-                    zipcode: 60208)
+                    zipcode: 60208
+)
+
+# Insert initial (seed) data for graffiti
+graffiti_table = DB.from(:graffiti)
+
+graffiti_table.insert(user_id: 1,
+                    location_id: 1,
+                    graffiti: "Kilroy was here",
+                    graffitiyear: 2020,
+                    graffitimonth: 3,
+                    graffitiday: 15,
+                    anonymous: 1
+)
+
+graffiti_table.insert(user_id: 1,
+                    location_id: 1,
+                    graffiti: "Pavan was here too",
+                    graffitiyear: 2020,
+                    graffitimonth: 3,
+                    graffitiday: 15,
+                    anonymous: 0
+)

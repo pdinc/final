@@ -32,7 +32,7 @@
             <ul class="navbar-nav ml-auto">
                 <% if @current_user %>
                     <li class="navbar-text">
-                        Logged in as <%= @current_user[:name] %>
+                        Logged in as <%= @current_user[:username] %>
                     </li>
                     <li class="nav-item">
                         <a href="/logout" class="nav-link">Logout</a>

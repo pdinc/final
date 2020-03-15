@@ -26,6 +26,7 @@ client = Twilio::REST::Client.new(account_sid, auth_token)
 
 before do
     @current_user = users_table.where(id: session["user_id"]).to_a[0]
+    puts "current user: #{@current_user}"
 end
 
 get "/" do
@@ -58,17 +59,17 @@ post "/users/create" do
             telephone: "+1#{params["telephone"]}",
             password: BCrypt::Password.create(params["password"])
         )
+        client.messages.create(
+        from: "+14707190684", 
+        to: "+16174069139",
+        body: "Thanks for signing up!"
+        )
         redirect "/logins/new"
     end
 end
 
 # display the login form (aka "new")
 get "/logins/new" do
-    client.messages.create(
-        from: "+14707190684", 
-        to: "+16174069139",
-        body: "Thanks for signing up!"
-    )
     view "new_login"
 end
 
@@ -105,11 +106,57 @@ get "/locations/:id" do
     puts "params: #{params}"
 
     @users_table = users_table
-    @locations = locations_table.to_a[0]
-    pp @locations
+    @location = locations_table.where(id: params[:id]).to_a[0]
+    #graffiti_table = graffiti_table.order(Sequel.desc(:graffitiyear, :graffitimonth))
+    #@graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitimonth, :graffitiday)).to_a[0]
+    #graffiti_table = graffiti_table.reload
+    @graffiti = graffiti_table.to_a[0]
+
+    pp @graffiti
+    pp @location
 
     #@rsvps = rsvps_table.where(event_id: @event[:id]).to_a
     #@going_count = rsvps_table.where(event_id: @event[:id], going: true).count
 
     view "location"
+end
+
+get "/locations/:id/graffiti/new" do
+    puts "/graffiti/new params: #{params}"
+    
+    @users_table = users_table
+    @location = locations_table.where(id: params["id"]).to_a[0]
+    #graffiti_table = graffiti_table.order(Sequel.desc(:graffitiyear, :graffitimonth))
+    #@graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitimonth, :graffitiday)).to_a[0]
+
+    @graffiti = graffiti_table.where(location_id: params["id"]).to_a[0]
+
+
+    pp @graffiti
+    pp @location
+
+    view "new_graffiti"
+end
+
+post "/locations/:id/graffiti/create" do
+    puts "/graffiti/create params: #{params}"
+
+    #create new entry in graffiti table
+    if params["anonymous"] == "on" then
+        anonymous_tempvar = 1
+    else
+        anonymous_tempvar = 0
+    end
+    time = Time.new
+    graffiti_table.insert(user_id: @current_user[:id],
+                    location_id: params["id"],
+                    graffiti: params["graffiti"],
+                    graffitiyear: time.year,
+                    graffitimonth: time.month,
+                    graffitiday: time.day,
+                    anonymous: anonymous_tempvar
+    )
+
+    redirect "/locations/#{@params["id"]}"
+
 end
