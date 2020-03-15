@@ -6,10 +6,15 @@
         </form>
     </div>
 </div>
-<div class="row">
+<div class="row mt-3">
     <div class="col-sm">
-        <% for @item in @graffiti do %>
-            <p>  @item[:graffiti] </p>
+        <% for @year in @years do %>
+            <h3> Comments posted in <%= @year[:graffitiyear] %> </h1>
+            <% for @item in @graffiti do %>
+                <% if @item[:graffitiyear] == @year[:graffitiyear] %>
+                    <p> <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}:" %> <%= @item[:graffiti] %> </p>
+                <% end %>
+            <% end %>
         <% end %>
     </div>
 </div>

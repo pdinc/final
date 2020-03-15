@@ -109,11 +109,14 @@ get "/locations/:id" do
     @location = locations_table.where(id: params[:id]).to_a[0]
     #graffiti_table = graffiti_table.order(Sequel.desc(:graffitiyear, :graffitimonth))
     #@graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitimonth, :graffitiday)).to_a[0]
-    #graffiti_table = graffiti_table.reload
-    @graffiti = graffiti_table.to_a[0]
+    @graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).to_a
+    @years = graffiti_table.select(:graffitiyear).where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
+
+    @montharray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     pp @graffiti
     pp @location
+    pp @years
 
     #@rsvps = rsvps_table.where(event_id: @event[:id]).to_a
     #@going_count = rsvps_table.where(event_id: @event[:id], going: true).count
@@ -129,11 +132,12 @@ get "/locations/:id/graffiti/new" do
     #graffiti_table = graffiti_table.order(Sequel.desc(:graffitiyear, :graffitimonth))
     #@graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitimonth, :graffitiday)).to_a[0]
 
-    @graffiti = graffiti_table.where(location_id: params["id"]).to_a[0]
-
+    @graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).to_a
+    @years = graffiti_table.select(:graffitiyear).where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
 
     pp @graffiti
     pp @location
+    pp @years
 
     view "new_graffiti"
 end

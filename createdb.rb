@@ -48,9 +48,9 @@ graffiti_table = DB.from(:graffiti)
 graffiti_table.insert(user_id: 1,
                     location_id: 1,
                     graffiti: "Kilroy was here",
-                    graffitiyear: 2020,
-                    graffitimonth: 3,
-                    graffitiday: 15,
+                    graffitiyear: 2019,
+                    graffitimonth: 1,
+                    graffitiday: 12,
                     anonymous: 1
 )
 
@@ -58,7 +58,7 @@ graffiti_table.insert(user_id: 1,
                     location_id: 1,
                     graffiti: "Pavan was here too",
                     graffitiyear: 2020,
-                    graffitimonth: 3,
-                    graffitiday: 15,
+                    graffitimonth: 2,
+                    graffitiday: 12,
                     anonymous: 0
 )
