@@ -5,31 +5,34 @@ DB = Sequel.connect(connection_string)                                          
 #######################################################################################
 
 # Database schema - this should reflect your domain model
-DB.create_table! :events do
+DB.create_table! :users do
   primary_key :id
-  String :title
-  String :description, text: true
-  String :date
-  String :location
+  String :username
+  String :password
+  String :telephone
 end
-DB.create_table! :rsvps do
+DB.create_table! :locations do
   primary_key :id
-  foreign_key :event_id
-  Boolean :going
-  String :name
-  String :email
-  String :comments, text: true
+  String :placename
+  String :gmapsplaceid
+  Fixnum :zipcode
+end
+DB.create_table! :graffiti do
+  primary_key :id
+  foreign_key :user_id
+  foreign_key :location_id
+  String :graffiti
+  Date :graffitidate
+  Boolean :anonymous
 end
 
-# Insert initial (seed) data
-events_table = DB.from(:events)
+# Insert initial (seed) data for locations
+locations_table = DB.from(:locations)
 
-events_table.insert(title: "Bacon Burger Taco Fest", 
-                    description: "Here we go again bacon burger taco fans, another Bacon Burger Taco Fest is here!",
-                    date: "June 21",
-                    location: "Kellogg Global Hub")
+locations_table.insert(placename: "Wieboldt Hall",
+                    gmapsplaceid: "ChIJ1STroD0pDogR5cNexT86gbs", 
+                    zipcode: 60611)
 
-events_table.insert(title: "Kaleapolooza", 
-                    description: "If you're into nutrition and vitamins and stuff, this is the event for you.",
-                    date: "July 4",
-                    location: "Nowhere")
+locations_table.insert(placename: "Global Hub",
+                    gmapsplaceid: "ChIJmWd1cp7aD4gRzYzB_KYoiu4", 
+                    zipcode: 60208)
