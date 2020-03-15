@@ -28,6 +28,7 @@ get "/" do
 
     @locations = locations_table.all.to_a
     pp @locations
+    pp @current_user
 
     view "locations"
 end
@@ -47,8 +48,9 @@ post "/users/create" do
         view "error"
     else
         users_table.insert(
-            name: params["name"],
+            username: params["username"],
             email: params["email"],
+            telephone: params["telephone"],
             password: BCrypt::Password.create(params["password"])
         )
 

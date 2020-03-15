@@ -8,8 +8,9 @@ DB = Sequel.connect(connection_string)                                          
 DB.create_table! :users do
   primary_key :id
   String :username
-  String :password
+  String :email
   String :telephone
+  String :password
 end
 DB.create_table! :locations do
   primary_key :id
