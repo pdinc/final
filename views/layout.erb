@@ -18,7 +18,7 @@
     <!-- Your own CSS -->
     <link rel="stylesheet" href="/styles.css">
 
-    <title>Hello world!</title>
+    <title>Welcome to DigGraf - Digital Graffiti!</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -32,7 +32,7 @@
             <ul class="navbar-nav ml-auto">
                 <% if @current_user %>
                     <li class="navbar-text">
-                        Logged in as <%= @current_user[:username] %>
+                        <a href="/users/<%= @current_user[:id]%>/summary"> Logged in as <%= @current_user[:username] %> </a>
                     </li>
                     <li class="nav-item">
                         <a href="/logout" class="nav-link">Logout</a>

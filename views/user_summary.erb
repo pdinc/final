@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-sm">
+        <h1> <%= @user[:username] %>'s Graffiti Summary </h1>
+        
+        <% for @year in @years do %>
+            <h3 class="mt-5"> Graffiti posted in <%= @year[:graffitiyear] %> </h1>
+            <% for @item in @graffiti do%>
+                <% if @item[:graffitiyear] == @year[:graffitiyear] then %>
+                    <% if @user[:id] == @current_user[:id] then %>
+                        <p class="font-weight-bold">
+                            <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
+                            At <%= @location[0][:placename] %> on 
+                            <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
+                            <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
+                            <% if @item[:anonymous] == 1 then %>
+                                <span class="anonymous-indicator font-weight-normal"> (Posted anonymously) </span>
+                            <% end %>
+                        </p>
+                    <% else %>
+                        <% if @item[:anonymous] == 0 then %>
+                            <p class="font-weight-bold">
+                                <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
+                                At <%= @location[0][:placename] %> on 
+                                <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
+                                <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
+                            </p>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            <% end %>
+        <% end %>
+    </div>
+</div>

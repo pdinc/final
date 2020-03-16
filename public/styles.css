@@ -1,0 +1,13 @@
+.graffiti-metadata {
+    color: coral;
+}
+
+.graffiti-data {
+    font-size: larger;
+    color: black;
+}
+
+.anonymous-indicator {
+    color:slategray;
+    font-style: italic;
+}
