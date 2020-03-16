@@ -15,7 +15,7 @@
                     <p class="graffiti-metadata"> 
                         <% @user = @users.select {|user| user[:id] == @item[:user_id]} %>
                         <% if @item[:anonymous] == 0 then %>
-                            <%= @user[0][:username] %> said on 
+                            <a href="/users/<%= @user[0][:id] %>/summary"> <%= @user[0][:username] %> </a> said on
                         <% else %>
                             Anonymous said on 
                         <% end %>
