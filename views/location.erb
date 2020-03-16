@@ -19,7 +19,7 @@
                         <% else %>
                             Anonymous said on 
                         <% end %>
-                        <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %> 
+                        <%= "#{@montharray[@item[:graffitimonth]-2]}, #{@item[:graffitiday]}: " %> 
                     <span class="graffiti-data">
                         <%= @item[:graffiti] %> 
                     </span>
