@@ -19,6 +19,7 @@ users_table = DB.from(:users)
 graffiti_table = DB.from(:graffiti)
 @gmaps_apikey = "AIzaSyCtovsQvkIUWlNqtYwXY87gEd4ZSmJEhMw"
 
+
 #Twilio API keys
 account_sid = ENV["TWILIO_ACCOUNT_SID"]
 auth_token = ENV["TWILIO_AUTH_TOKEN"]
@@ -107,19 +108,9 @@ get "/locations/:id" do
 
     @users = users_table.to_a
     @location = locations_table.where(id: params["id"]).to_a[0]
-    #graffiti_table = graffiti_table.order(Sequel.desc(:graffitiyear, :graffitimonth))
-    #@graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitimonth, :graffitiday)).to_a[0]
     @graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).to_a
     @years = graffiti_table.select(:graffitiyear).where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
-
     @montharray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-    pp @graffiti
-    pp @location
-    pp @users
-
-    #@rsvps = rsvps_table.where(event_id: @event[:id]).to_a
-    #@going_count = rsvps_table.where(event_id: @event[:id], going: true).count
 
     view "location"
 end
@@ -129,18 +120,9 @@ get "/locations/:id/graffiti/new" do
     
     @users = users_table.to_a
     @location = locations_table.where(id: params["id"]).to_a[0]
-    #graffiti_table = graffiti_table.order(Sequel.desc(:graffitiyear, :graffitimonth))
-    #@graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitimonth, :graffitiday)).to_a[0]
-
     @graffiti = graffiti_table.where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).to_a
     @years = graffiti_table.select(:graffitiyear).where(location_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
-
     @montharray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-
-    pp @graffiti
-    pp @location
-    pp @years
 
     view "new_graffiti"
 end
@@ -174,14 +156,18 @@ get "/users/:id/summary" do
     @locations = locations_table.to_a
     @graffiti = graffiti_table.where(user_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).to_a
     
-    # If user is looking at their summary, return a years array for HTML for loop including any anonymous comments, otherwise filter if looking at another user's summary
-    if @user[:id] == @current_user[:id] then
-        @years = graffiti_table.select(:graffitiyear).where(user_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
+    # If user is looking at their summary, return a years array for HTML for loop including any anonymous comments, otherwise filter years with only anonymous comments if looking at another user's summary
+    
+    if @current_user then
+        if @user[:id] == @current_user[:id] then
+            @years = graffiti_table.select(:graffitiyear).where(user_id: params["id"]).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
+        else
+            @years = graffiti_table.select(:graffitiyear).where(user_id: params["id"], anonymous: 0).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
+        end
     else
         @years = graffiti_table.select(:graffitiyear).where(user_id: params["id"], anonymous: 0).order(Sequel.desc(:graffitiyear),Sequel.desc(:graffitimonth),Sequel.desc(:graffitiday)).distinct.to_a
     end
-    
-    
+
     @montharray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     view "user_summary"

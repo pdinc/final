@@ -6,25 +6,38 @@
             <h3 class="mt-5"> Graffiti posted in <%= @year[:graffitiyear] %> </h1>
             <% for @item in @graffiti do%>
                 <% if @item[:graffitiyear] == @year[:graffitiyear] then %>
-                    <% if @user[:id] == @current_user[:id] then %>
-                        <p class="font-weight-bold">
-                            <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
-                            At <%= @location[0][:placename] %> on 
-                            <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
-                            <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
-                            <% if @item[:anonymous] == 1 then %>
-                                <span class="anonymous-indicator font-weight-normal"> (Posted anonymously) </span>
-                            <% end %>
-                        </p>
-                    <% else %>
-                        <% if @item[:anonymous] == 0 then %>
+                    <!-- This for loop is to avoid an error if someone browses the app without signing in -->
+                    <% if @current_user then %>
+                        <!-- This for loop checks if the user summary being seen is for the logged in user, and only then shows anonymous comments -->
+                        <% if @user[:id] == @current_user[:id] then %>
                             <p class="font-weight-bold">
                                 <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
-                                At <%= @location[0][:placename] %> on 
+                                At <a href = "/locations/<%= @location[0][:id] %>"><%= @location[0][:placename] %></a> on 
                                 <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
                                 <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
+                                <% if @item[:anonymous] == 1 then %>
+                                    <span class="anonymous-indicator font-weight-normal"> (Posted anonymously) </span>
+                                <% end %>
                             </p>
+                        <% else %>
+                            <% if @item[:anonymous] == 0 then %>
+                                <p class="font-weight-bold">
+                                    <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
+                                    At <a href = "/locations/<%= @location[0][:id] %>"><%= @location[0][:placename] %></a> on 
+                                    <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
+                                    <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
+                                </p>
+                            <% end %>
                         <% end %>
+                    <% else %>
+                        <% if @item[:anonymous] == 0 then %>
+                                <p class="font-weight-bold">
+                                    <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
+                                    At <a href = "/locations/<%= @location[0][:id] %>"><%= @location[0][:placename] %></a> on 
+                                    <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
+                                    <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
+                                </p>
+                            <% end %>
                     <% end %>
                 <% end %>
             <% end %>
