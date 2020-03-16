@@ -17,7 +17,7 @@ after { puts; }                                                                 
 locations_table = DB.from(:locations)
 users_table = DB.from(:users)
 graffiti_table = DB.from(:graffiti)
-@gmaps_apikey = "AIzaSyCtovsQvkIUWlNqtYwXY87gEd4ZSmJEhMw"
+@gmaps_apikey = ""
 
 
 #Twilio API keys
