@@ -13,7 +13,7 @@
                             <p class="font-weight-bold">
                                 <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
                                 At <a href = "/locations/<%= @location[0][:id] %>"><%= @location[0][:placename] %></a> on 
-                                <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
+                                <%= "#{@montharray[@item[:graffitimonth]-1]}, #{@item[:graffitiday]}: " %>
                                 <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
                                 <% if @item[:anonymous] == 1 then %>
                                     <span class="anonymous-indicator font-weight-normal"> (Posted anonymously) </span>
@@ -24,7 +24,7 @@
                                 <p class="font-weight-bold">
                                     <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
                                     At <a href = "/locations/<%= @location[0][:id] %>"><%= @location[0][:placename] %></a> on 
-                                    <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
+                                    <%= "#{@montharray[@item[:graffitimonth]-1]}, #{@item[:graffitiday]}: " %>
                                     <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
                                 </p>
                             <% end %>
@@ -34,7 +34,7 @@
                                 <p class="font-weight-bold">
                                     <% @location = @locations.select {|location| location[:id] == @item[:location_id]}  %>
                                     At <a href = "/locations/<%= @location[0][:id] %>"><%= @location[0][:placename] %></a> on 
-                                    <%= "#{@montharray[@item[:graffitimonth]]}, #{@item[:graffitiday]}: " %>
+                                    <%= "#{@montharray[@item[:graffitimonth]-1]}, #{@item[:graffitiday]}: " %>
                                     <span class="font-weight-normal"> <%= @item[:graffiti] %> </span>
                                 </p>
                             <% end %>
